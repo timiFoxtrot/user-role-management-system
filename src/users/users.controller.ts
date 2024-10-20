@@ -12,14 +12,19 @@ import {
 import { UsersService } from './users.service';
 import { Roles } from '../auth/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/auth.guard';
-import { ErrorResponse, SuccessResponse } from 'src/common/helpers/response';
+import { RolesGuard } from '../auth/auth.guard';
+import { ErrorResponse, SuccessResponse } from '../common/helpers/response';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AssignRoleDto } from './dto/update-user.dto';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({summary: 'Fetch all users'})
+  @ApiResponse({ status: 200, description: 'Users list' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin') // Only Admin can access this endpoint
   async getAllUsers() {
@@ -37,7 +42,10 @@ export class UsersController {
   @Post('assign-role')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin') // Only Admin can assign roles
-  async assignRole(@Body() assignRoleDto: { userId: string; roleId: string }) {
+  @ApiOperation({summary: 'Assign role to user'})
+  @ApiBody({ type:  AssignRoleDto})
+  @ApiResponse({ status: 200, description: 'Role assigned' })
+  async assignRole(@Body() assignRoleDto: AssignRoleDto) {
     try {
       const response = await this.usersService.assignRole({
         userId: Number(assignRoleDto.userId),
@@ -55,10 +63,11 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin') // Only Admin can delete users
+  @ApiOperation({summary: 'Delete a user'})
+  @ApiResponse({ status: 200, description: 'User deleted' })
   async deleteUser(@Param('id') id: string) {
     try {
       const response = await this.usersService.remove(Number(id));
-      console.log({response})
       return SuccessResponse('User deleted', { data: response });
     } catch (error) {
       throw ErrorResponse(
