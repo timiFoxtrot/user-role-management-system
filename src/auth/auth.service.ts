@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { generateHash, validateHash } from 'src/common/utils';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { generateHash, validateHash } from '../common/utils';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 
 @Injectable()
