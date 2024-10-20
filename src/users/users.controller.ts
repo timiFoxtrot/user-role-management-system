@@ -6,17 +6,18 @@ import {
   Delete,
   Param,
   UseGuards,
-  Req,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Roles } from '../auth/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/auth.guard';
 import { ErrorResponse, SuccessResponse } from '../common/helpers/response';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssignRoleDto } from './dto/update-user.dto';
 
+@ApiBearerAuth()
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -40,6 +41,7 @@ export class UsersController {
   }
 
   @Post('assign-role')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin') // Only Admin can assign roles
   @ApiOperation({summary: 'Assign role to user'})

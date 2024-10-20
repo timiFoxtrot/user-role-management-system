@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { ErrorResponse, SuccessResponse } from '../common/helpers/response';
@@ -28,13 +28,14 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(200)
   @ApiOperation({summary: 'Login a user'})
   @ApiBody({ type:  LoginDto})
   @ApiResponse({ status: 200, description: 'Login successful' })
   async login(@Body() loginUserDto: LoginDto) {
     try {
       const response = await this.authService.login(loginUserDto)
-      return SuccessResponse('Login successful', { data: response });
+      return SuccessResponse('Login successful', { data: response }, 200);
     } catch (error) {
       throw ErrorResponse(
         error.message || 'Unable to login',

@@ -17,6 +17,7 @@ export class CreateAuthDto {
   lastName: string;
 
   @IsEmail()
+  @Transform((val) => val.value.toLowerCase())
   email: string;
 
   @IsNotEmpty()

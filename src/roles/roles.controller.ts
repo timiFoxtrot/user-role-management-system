@@ -12,8 +12,9 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { ErrorResponse, SuccessResponse } from '../common/helpers/response';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
