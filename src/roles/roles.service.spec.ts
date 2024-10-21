@@ -39,7 +39,7 @@ describe('RolesService', () => {
 
       const mockRole = { id: 1, name: 'Admin', permissions: ['read', 'write'] };
 
-      jest.spyOn(prisma.role, 'findUnique').mockResolvedValue(null); // No existing role
+      jest.spyOn(prisma.role, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prisma.role, 'create').mockResolvedValue(mockRole);
 
       const result = await service.createRole(createRoleDto);
@@ -56,7 +56,7 @@ describe('RolesService', () => {
 
       const existingRole = { id: 1, name: 'Admin', permissions: ['read', 'write'] };
 
-      jest.spyOn(prisma.role, 'findUnique').mockResolvedValue(existingRole); // Role exists
+      jest.spyOn(prisma.role, 'findUnique').mockResolvedValue(existingRole);
 
       await expect(service.createRole(createRoleDto)).rejects.toThrow(
         new ConflictException('Role already exists'),

@@ -21,7 +21,7 @@ export class AuthService {
 
     const roles = await this.prisma.role.findMany({
       where: {
-        name: { in: data.roles || [] }, // Use the roles passed in, or an empty array if none are provided
+        name: { in: data.roles || [] },
       },
     });
 
@@ -32,7 +32,7 @@ export class AuthService {
         email: data.email,
         passwordHash: hashedPassword,
         roles: {
-          connect: roles.map((role) => ({ id: role.id })), // Connect roles by their IDs
+          connect: roles.map((role) => ({ id: role.id })),
         },
       },
     });

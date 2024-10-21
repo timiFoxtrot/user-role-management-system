@@ -66,7 +66,7 @@ describe('AuthService', () => {
         roles: ['Admin'],
       };
 
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null); // No user exists with this email
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prisma.role, 'findMany').mockResolvedValue([{ id: 1, name: 'Admin', permissions: [] }]);
       jest.spyOn(prisma.user, 'create').mockResolvedValue(mockUser);
       (generateHash as jest.Mock).mockResolvedValue('hashed_password');
@@ -180,7 +180,7 @@ describe('AuthService', () => {
     });
 
     it('should throw a BadRequestException on invalid login', async () => {
-      jest.spyOn(service, 'validateUser').mockResolvedValue(null); // Invalid credentials
+      jest.spyOn(service, 'validateUser').mockResolvedValue(null);
 
       await expect(service.login({ email: 'test@example.com', password: 'password123' })).rejects.toThrow(
         new BadRequestException('Invalid credential'),

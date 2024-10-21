@@ -17,7 +17,7 @@ describe('AppController (e2e)', () => {
       imports: [
         AppModule,
         JwtModule.register({
-          secret: process.env.JWT_SECRET, // Provide a mock secret here
+          secret: process.env.JWT_SECRET,
           signOptions: { expiresIn: '1h' },
         }),
       ],
@@ -26,12 +26,11 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     jwtService = moduleFixture.get<JwtService>(JwtService);
 
-    // Generate a mock token for the test
     mockToken = jwtService.sign({
       email: 'foxtrot@example.com',
       sub: createdUserId,
       roles: ['Admin'],
-    }); // Adjust payload as necessary
+    });
     await app.init();
   });
 
@@ -144,14 +143,15 @@ describe('AppController (e2e)', () => {
       });
   });
 
+  // Test for deleting a user (DELETE /users/:id)
   it('/users/:id (DELETE)', async () => {
     return request(app.getHttpServer())
       .delete(`/users/${createdUserId}`)
-      .set('Authorization', `Bearer ${mockToken}`) // Assuming JWT is required
+      .set('Authorization', `Bearer ${mockToken}`)
       .expect(200)
       .expect((res) => {
         expect(res.body.message).toBe('User deleted');
-        expect(res.body.data).toHaveProperty('id', createdUserId); // Ensure the response has the deleted user's ID
+        expect(res.body.data).toHaveProperty('id', createdUserId);
       });
   });
 });
